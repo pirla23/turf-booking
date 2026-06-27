@@ -87,23 +87,15 @@ export default function Home() {
           transition={{ duration: 0.3 }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0B0F14]"
         >
-          <div className="relative">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/90 to-gray-100/90 rounded-2xl blur-xl"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            />
-            <motion.img
-              src="/logo.png"
-              alt="Akan's Arena"
-              className="relative w-40 h-40 object-contain mb-4 p-4 bg-white/95 rounded-2xl shadow-2xl"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-          <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden mt-4">
+          <motion.img
+            src="/logo.png"
+            alt="Akan's Arena"
+            className="w-40 h-40 object-contain mb-4 rounded-lg"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          />
+          <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-[#1E8E3E] to-[#4ADE80]"
               initial={{ width: "0%" }}
