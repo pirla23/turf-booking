@@ -220,24 +220,58 @@ export default function Booking() {
               {booking.session === "Custom" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 glass rounded-xl">
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Start Time (e.g. 8:11 PM)</label>
-                    <input
-                      type="text"
-                      placeholder="Enter start time"
-                      value={booking.startTime}
-                      onChange={(e) => setStartTime(e.target.value)}
-                      className="w-full glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
-                    />
+                    <label className="block text-xs text-gray-400 mb-1">Start Time (e.g. 8:00)</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Time"
+                        value={booking.startTime.replace(/(AM|PM)\s*$/i, "").trim()}
+                        onChange={(e) => {
+                          const time = e.target.value;
+                          const period = booking.startTime.match(/(AM|PM)$/i)?.[0] || "PM";
+                          setStartTime(`${time} ${period}`);
+                        }}
+                        className="w-full glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      />
+                      <select
+                        value={booking.startTime.match(/(AM|PM)$/i)?.[0] || "PM"}
+                        onChange={(e) => {
+                          const time = booking.startTime.replace(/(AM|PM)\s*$/i, "").trim() || "8:00";
+                          setStartTime(`${time} ${e.target.value}`);
+                        }}
+                        className="glass rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      >
+                        <option value="AM" className="text-black">AM</option>
+                        <option value="PM" className="text-black">PM</option>
+                      </select>
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">End Time (e.g. 2:00 AM)</label>
-                    <input
-                      type="text"
-                      placeholder="Enter end time"
-                      value={booking.endTime}
-                      onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
-                    />
+                    <label className="block text-xs text-gray-400 mb-1">End Time (e.g. 2:00)</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Time"
+                        value={booking.endTime.replace(/(AM|PM)\s*$/i, "").trim()}
+                        onChange={(e) => {
+                          const time = e.target.value;
+                          const period = booking.endTime.match(/(AM|PM)$/i)?.[0] || "AM";
+                          setEndTime(`${time} ${period}`);
+                        }}
+                        className="w-full glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      />
+                      <select
+                        value={booking.endTime.match(/(AM|PM)$/i)?.[0] || "AM"}
+                        onChange={(e) => {
+                          const time = booking.endTime.replace(/(AM|PM)\s*$/i, "").trim() || "10:00";
+                          setEndTime(`${time} ${e.target.value}`);
+                        }}
+                        className="glass rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      >
+                        <option value="AM" className="text-black">AM</option>
+                        <option value="PM" className="text-black">PM</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               )}
