@@ -242,22 +242,6 @@ function HeroSection() {
           </div>
         </motion.div>
       </div>
-
-      {/* Scroll indicator - hidden on mobile */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3 }}
-      >
-        <motion.div
-          className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-1.5 h-1.5 rounded-full bg-[#4ADE80]" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
