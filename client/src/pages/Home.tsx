@@ -145,7 +145,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-end md:items-center justify-center overflow-hidden pb-8 md:pb-0">
+    <section className="relative min-h-screen flex items-start justify-center overflow-hidden pt-[20vh] md:pt-[18vh] pb-8 md:pb-0">
       {/* Background image with parallax */}
       <div
         className="absolute inset-0"
@@ -208,32 +208,32 @@ function HeroSection() {
       ))}
 
       {/* Content */}
-      <div className="relative z-20 text-center px-4 max-w-4xl">
+      <div className="relative z-20 text-center px-6 sm:px-8 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.2 }}
         >
           {/* Heading */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-[Outfit] text-white leading-[1.05] tracking-tight mb-3">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-[Outfit] text-white leading-[1.05] tracking-tight mb-6">
             AKAN'S
             <span className="text-gradient"> ARENA</span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-2xl text-gray-300 font-medium mb-4 font-[Outfit]">
+          <p className="text-lg md:text-2xl text-gray-300 font-medium mb-5 font-[Outfit]">
             Salem's Premium Multi-Sports Arena
           </p>
 
           {/* Description */}
-          <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+          <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
             Experience professional football, cricket, and pickleball facilities with premium infrastructure,
             excellent lighting, and seamless online booking. Whether you're playing with friends, family,
             or your team, AKAN'S ARENA delivers a world-class sports experience.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 relative z-10">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5 relative z-10">
             <Link
               href="/booking"
               className="btn-gradient text-white font-semibold px-8 py-4 rounded-xl text-lg shadow-xl shadow-[#1E8E3E]/20 hover:shadow-[#1E8E3E]/40 transition-all"
