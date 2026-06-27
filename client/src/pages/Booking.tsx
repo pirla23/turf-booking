@@ -220,7 +220,7 @@ export default function Booking() {
               {booking.session === "Custom" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 glass rounded-xl">
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Start Time (e.g. 8:00)</label>
+                    <label className="block text-xs text-gray-400 mb-1">Start Time</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -247,7 +247,7 @@ export default function Booking() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">End Time (e.g. 2:00)</label>
+                    <label className="block text-xs text-gray-400 mb-1">End Time</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
