@@ -9,6 +9,7 @@ import Booking from "./pages/Booking";
 import Sports from "./pages/Sports";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 import Layout from "./components/Layout";
 import { BookingProvider } from "./contexts/BookingContext";
 
@@ -21,6 +22,7 @@ function Router() {
       <Route path={"/sports"} component={Sports} />
       <Route path={"/gallery"} component={Gallery} />
       <Route path={"/contact"} component={Contact} />
+      <Route path={"/admin"} component={Admin} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

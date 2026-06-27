@@ -3,11 +3,15 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 export interface BookingState {
   sport: string;
   date: string;
+  session: string; // "AM", "PM", "Custom"
   startTime: string;
+  endTime: string; // For Custom
   duration: string;
   slots: string[];
   pricePerHour: number;
   playerName: string;
+  email: string;
+  mobile: string;
   playerCount: string;
 }
 
@@ -15,10 +19,14 @@ interface BookingContextType {
   booking: BookingState;
   setSport: (sport: string) => void;
   setDate: (date: string) => void;
+  setSession: (session: string) => void;
   setStartTime: (time: string) => void;
+  setEndTime: (time: string) => void;
   setDuration: (dur: string) => void;
   setSlots: (slots: string[]) => void;
   setPlayerName: (name: string) => void;
+  setEmail: (email: string) => void;
+  setMobile: (mobile: string) => void;
   setPlayerCount: (count: string) => void;
   setPricePerHour: (price: number) => void;
   resetBooking: () => void;
@@ -28,11 +36,15 @@ interface BookingContextType {
 const defaultBooking: BookingState = {
   sport: "",
   date: "",
+  session: "",
   startTime: "",
-  duration: "",
+  endTime: "",
+  duration: "1",
   slots: [],
   pricePerHour: 500,
   playerName: "",
+  email: "",
+  mobile: "",
   playerCount: "",
 };
 
@@ -53,8 +65,16 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     setBooking(prev => ({ ...prev, date, slots: [] }));
   }, []);
 
+  const setSession = useCallback((session: string) => {
+    setBooking(prev => ({ ...prev, session, slots: [], startTime: "", endTime: "" }));
+  }, []);
+
   const setStartTime = useCallback((startTime: string) => {
     setBooking(prev => ({ ...prev, startTime }));
+  }, []);
+
+  const setEndTime = useCallback((endTime: string) => {
+    setBooking(prev => ({ ...prev, endTime }));
   }, []);
 
   const setDuration = useCallback((duration: string) => {
@@ -67,6 +87,14 @@ export function BookingProvider({ children }: { children: ReactNode }) {
 
   const setPlayerName = useCallback((playerName: string) => {
     setBooking(prev => ({ ...prev, playerName }));
+  }, []);
+
+  const setEmail = useCallback((email: string) => {
+    setBooking(prev => ({ ...prev, email }));
+  }, []);
+
+  const setMobile = useCallback((mobile: string) => {
+    setBooking(prev => ({ ...prev, mobile }));
   }, []);
 
   const setPlayerCount = useCallback((playerCount: string) => {
@@ -84,14 +112,18 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   const getWhatsAppMessage = useCallback(() => {
     const b = booking;
     if (b.sport || b.date || b.startTime) {
+      const timeStr = b.session === 'Custom' ? `${b.startTime} to ${b.endTime}` : b.startTime;
       return `Hello AKAN'S ARENA Booking Coordinator,
 I would like to book a sports slot.
 Sport: ${b.sport || "Not selected"}
 Date: ${b.date || "Not selected"}
-Time: ${b.startTime || "Not selected"}
+Time: ${timeStr || "Not selected"}
+Session: ${b.session || "Not specified"}
 Duration: ${b.duration || "Not selected"}
 Number of Players: ${b.playerCount || "Not specified"}
 My Name: ${b.playerName || "Not provided"}
+Mobile: ${b.mobile || "Not provided"}
+Email: ${b.email || "Not provided"}
 Please confirm the availability.
 Thank you.`;
     }
@@ -103,8 +135,8 @@ Thank you.`;
 
   return (
     <BookingContext.Provider value={{
-      booking, setSport, setDate, setStartTime, setDuration,
-      setSlots, setPlayerName, setPlayerCount, setPricePerHour,
+      booking, setSport, setDate, setSession, setStartTime, setEndTime, setDuration,
+      setSlots, setPlayerName, setEmail, setMobile, setPlayerCount, setPricePerHour,
       resetBooking, getWhatsAppMessage
     }}>
       {children}

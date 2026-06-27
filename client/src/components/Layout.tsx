@@ -138,11 +138,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <main className="relative z-10 pb-20 lg:pb-0">
         {children}
-        <Footer />
+        {location !== "/booking" && <Footer />}
       </main>
 
       {/* Bottom Mobile Nav */}
-      <MobileBottomNav />
+      {location !== "/booking" && <MobileBottomNav />}
 
       {/* Floating WhatsApp Button (hide on booking page to avoid conflict with booking button) */}
       {location !== "/booking" && (
