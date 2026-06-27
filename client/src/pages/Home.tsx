@@ -145,7 +145,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-start justify-center overflow-hidden pt-[20vh] md:pt-[18vh] pb-8 md:pb-0">
+    <section className="relative min-h-screen flex items-start justify-center overflow-hidden pt-[14vh] md:pt-[15vh] pb-8 md:pb-0">
       {/* Background image with parallax */}
       <div
         className="absolute inset-0"
