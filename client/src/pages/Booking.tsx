@@ -15,6 +15,7 @@ import { toast } from "sonner";
 export default function Booking() {
   const { booking, setSport, setDate, setStartTime, setDuration, setSlots, setPlayerName, setPlayerCount, setPricePerHour, getWhatsAppMessage } = useBooking();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showSummary, setShowSummary] = useState(true);
   const [location] = useLocation();
 
   const sport = SPORTS.find(s => s.id === booking.sport);
@@ -86,7 +87,7 @@ export default function Booking() {
   const isReady = booking.sport && booking.date && booking.startTime && booking.duration;
 
   return (
-    <div className="pt-24 pb-28 lg:pb-10 min-h-screen">
+    <div className="pt-24 pb-6 lg:pb-10 min-h-screen">
       <div className="container max-w-4xl">
         <ScrollReveal>
           <div className="text-center mb-8">
@@ -231,69 +232,169 @@ export default function Booking() {
           </ScrollReveal>
         )}
 
-        {/* Booking Summary (Sticky) */}
+        {/* Spacer for mobile summary */}
+        {isReady && <div className="h-8 lg:hidden" />}
+
+        {/* Booking Summary - Mobile Collapsible, Desktop Sticky */}
         {isReady && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="fixed bottom-0 left-0 right-0 lg:relative lg:bottom-auto lg:mb-12 z-40"
-          >
-            <div className="glass-strong border-t lg:border border-white/10 rounded-t-2xl lg:rounded-2xl p-4 md:p-6 max-w-4xl mx-auto">
-              <div className="flex items-center gap-2 mb-4">
-                <CheckCircle2 className="w-5 h-5 text-[#4ADE80]" />
-                <h3 className="text-sm font-bold font-[Outfit] text-white">Booking Summary</h3>
-              </div>
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm mb-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Sport</span>
-                  <span className="text-white font-medium capitalize">{booking.sport}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Date</span>
-                  <span className="text-white font-medium">{booking.date}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Time</span>
-                  <span className="text-white font-medium">{booking.startTime}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Duration</span>
-                  <span className="text-white font-medium">{booking.duration} Hour{booking.duration !== "1" ? "s" : ""}</span>
-                </div>
-                <div className="col-span-2 flex justify-between pt-2 border-t border-white/10">
-                  <span className="text-white font-bold font-[Outfit]">Total</span>
-                  <span className="text-[#4ADE80] font-bold font-[Outfit] text-lg">₹{total.toLocaleString()}</span>
-                </div>
-              </div>
+          <>
+            {/* Mobile: Fixed Bottom Summary with Toggle */}
+            <AnimatePresence>
+              {showSummary && (
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 lg:hidden z-50 safe-bottom"
+                >
+                  <div className="glass-strong border-t border-white/10 rounded-t-3xl p-5 shadow-2xl bg-[#0B0F14]/95 backdrop-blur-xl">
+                    {/* Summary Header with Close */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-[#4ADE80]" />
+                        <h3 className="text-base font-bold font-[Outfit] text-white">Booking Summary</h3>
+                      </div>
+                      <button
+                        onClick={() => setShowSummary(false)}
+                        className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        aria-label="Close summary"
+                      >
+                        <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    </div>
 
-              {/* Player details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  value={booking.playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  className="glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
-                />
-                <input
-                  type="number"
-                  placeholder="Number of Players"
-                  value={booking.playerCount}
-                  onChange={(e) => setPlayerCount(e.target.value)}
-                  className="glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
-                />
-              </div>
+                    {/* Compact Summary Info */}
+                    <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
+                      <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                        <span className="text-gray-400 text-xs block mb-1">Sport & Date</span>
+                        <span className="text-white font-semibold capitalize block">{booking.sport}</span>
+                        <span className="text-gray-300 text-xs">{booking.date}</span>
+                      </div>
+                      <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                        <span className="text-gray-400 text-xs block mb-1">Time & Duration</span>
+                        <span className="text-white font-semibold block">{booking.startTime}</span>
+                        <span className="text-gray-300 text-xs">{booking.duration} Hour{booking.duration !== "1" ? "s" : ""}</span>
+                      </div>
+                    </div>
 
-              <button
-                onClick={() => setShowConfirm(true)}
-                className="w-full btn-gradient text-white font-semibold py-4 rounded-xl text-lg flex items-center justify-center gap-2 shadow-xl shadow-[#1E8E3E]/20"
+                    {/* Total Price */}
+                    <div className="flex items-center justify-between mb-4 p-3 rounded-xl bg-[#1E8E3E]/10 border border-[#1E8E3E]/30">
+                      <span className="text-white font-bold font-[Outfit]">Total Amount</span>
+                      <span className="text-[#4ADE80] font-bold font-[Outfit] text-xl">₹{total.toLocaleString()}</span>
+                    </div>
+
+                    {/* Player Details */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={booking.playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        className="glass rounded-lg px-3 py-2.5 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      />
+                      <input
+                        type="number"
+                        placeholder="Players"
+                        value={booking.playerCount}
+                        onChange={(e) => setPlayerCount(e.target.value)}
+                        className="glass rounded-lg px-3 py-2.5 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 border border-white/10"
+                      />
+                    </div>
+
+                    {/* Book Button */}
+                    <button
+                      onClick={() => setShowConfirm(true)}
+                      className="w-full btn-gradient text-white font-semibold py-3.5 rounded-xl text-base flex items-center justify-center gap-2 shadow-xl shadow-[#1E8E3E]/30"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Book via WhatsApp
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Show Summary Button when collapsed */}
+            {!showSummary && (
+              <motion.button
+                initial={{ y: 100 }}
+                animate={{ y: 0 }}
+                onClick={() => setShowSummary(true)}
+                className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:hidden z-50 btn-gradient px-6 py-3 rounded-full shadow-xl flex items-center gap-2 text-white font-semibold"
               >
-                <MessageCircle className="w-5 h-5" />
-                Book via WhatsApp
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
+                <CheckCircle2 className="w-5 h-5" />
+                View Summary (₹{total})
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              </motion.button>
+            )}
+
+            {/* Desktop: Sticky Summary */}
+            <ScrollReveal>
+              <div className="hidden lg:block sticky top-24 mb-12">
+                <div className="glass-strong border border-white/10 rounded-2xl p-6 shadow-2xl bg-[#0B0F14]/80 backdrop-blur-xl">
+                  <div className="flex items-center gap-2 mb-4">
+                    <CheckCircle2 className="w-5 h-5 text-[#4ADE80]" />
+                    <h3 className="text-sm font-bold font-[Outfit] text-white">Booking Summary</h3>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm mb-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Sport</span>
+                      <span className="text-white font-medium capitalize">{booking.sport}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Date</span>
+                      <span className="text-white font-medium">{booking.date}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Time</span>
+                      <span className="text-white font-medium">{booking.startTime}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Duration</span>
+                      <span className="text-white font-medium">{booking.duration} Hour{booking.duration !== "1" ? "s" : ""}</span>
+                    </div>
+                    <div className="col-span-2 flex justify-between pt-2 border-t border-white/10">
+                      <span className="text-white font-bold font-[Outfit]">Total</span>
+                      <span className="text-[#4ADE80] font-bold font-[Outfit] text-lg">₹{total.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Player details */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      value={booking.playerName}
+                      onChange={(e) => setPlayerName(e.target.value)}
+                      className="glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Number of Players"
+                      value={booking.playerCount}
+                      onChange={(e) => setPlayerCount(e.target.value)}
+                      className="glass rounded-lg px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => setShowConfirm(true)}
+                    className="w-full btn-gradient text-white font-semibold py-4 rounded-xl text-lg flex items-center justify-center gap-2 shadow-xl shadow-[#1E8E3E]/20"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Book via WhatsApp
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </ScrollReveal>
+          </>
         )}
 
         {/* Booking Confirmation Dialog */}
