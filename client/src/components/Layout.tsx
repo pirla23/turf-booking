@@ -136,10 +136,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="relative z-10">
+      <main className="relative z-10 pb-20 lg:pb-0">
         {children}
         <Footer />
       </main>
+
+      {/* Bottom Mobile Nav */}
+      <MobileBottomNav />
 
       {/* Floating WhatsApp Button (hide on booking page to avoid conflict with booking button) */}
       {location !== "/booking" && (
@@ -229,6 +232,70 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: {
         </button>
       </div>
     </header>
+  );
+}
+
+/* ---------- Mobile Bottom Nav ---------- */
+function MobileBottomNav() {
+  const [location] = useLocation();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrolledToBottom = windowHeight + scrollTop >= documentHeight - 100;
+      setShow(scrolledToBottom);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Check initial position
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.nav
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          exit={{ y: 100 }}
+          transition={{ type: "spring", damping: 30 }}
+          className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-strong border-t border-white/10"
+          style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+        >
+          <div className="flex items-center justify-around py-2 px-2">
+            {[
+              { label: "Home", path: "/", icon: "🏠" },
+              { label: "Sports", path: "/sports", icon: "🏟️" },
+              { label: "Booking", path: "/booking", icon: "📅" },
+              { label: "Contact", path: "/contact", icon: "📞" },
+            ].map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all min-w-[60px] ${
+                  location === item.path
+                    ? "text-[#4ADE80] scale-105"
+                    : "text-gray-500 hover:text-gray-300"
+                }`}
+              >
+                <span className="text-xl">{item.icon}</span>
+                <span className="text-[10px] font-medium">{item.label}</span>
+                {location === item.path && (
+                  <motion.div
+                    layoutId="bottom-nav-indicator"
+                    className="absolute bottom-1 w-8 h-1 rounded-full bg-[#1E8E3E]"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </Link>
+            ))}
+          </div>
+        </motion.nav>
+      )}
+    </AnimatePresence>
   );
 }
 

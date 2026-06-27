@@ -13,6 +13,7 @@ import { useBooking } from "@/contexts/BookingContext";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const [counters, setCounters] = useState({ rating: 4, hours: 0, sports: 0, satisfaction: 0 });
   const [ratingDecimal, setRatingDecimal] = useState(0.9);
   const statsRef = useRef<HTMLDivElement>(null!);
@@ -20,9 +21,27 @@ export default function Home() {
 
   const { setSport } = useBooking();
 
+  // Splash screen - show only on first load
   useEffect(() => {
-    setLoaded(true);
+    const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+    if (hasSeenSplash) {
+      setShowSplash(false);
+      setLoaded(true);
+    } else {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        setLoaded(true);
+        sessionStorage.setItem('hasSeenSplash', 'true');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
+
+  useEffect(() => {
+    if (!showSplash) {
+      setLoaded(true);
+    }
+  }, [showSplash]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -59,7 +78,35 @@ export default function Home() {
   }, [statsVisible]);
 
   return (
-    <div className="pt-24 pb-10">
+    <div className="pt-24 pb-20 lg:pb-10">
+      {/* Splash Screen - 2 seconds on initial load only */}
+      {showSplash && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: showSplash ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          style={{ background: 'transparent' }}
+        >
+          <motion.img
+            src="/logo.png"
+            alt="Akan's Arena"
+            className="w-32 h-32 object-contain mb-4"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          />
+          <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#1E8E3E] to-[#4ADE80]"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2, ease: "linear" }}
+            />
+          </div>
+        </motion.div>
+      )}
+
       <LoadingScreen />
 
       {/* ===== HERO ===== */}
