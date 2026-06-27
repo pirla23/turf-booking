@@ -1,6 +1,6 @@
 export const WHATSAPP_NUMBER = "919894539465";
 export const BUSINESS_NAME = "AKAN'S ARENA";
-export const LOCATION = "Othur, Near Bharat Petroleum, Attur, Salem, Tamil Nadu 636102";
+export const LOCATION = "Attur, Near Bharat Petroleum, Attur, Salem, Tamil Nadu 636102";
 export const GOOGLE_RATING = 4.9;
 export const GOOGLE_MAPS_LINK = "https://maps.google.com/?q=AKAN'S+ARENA+Attur+Salem";
 
