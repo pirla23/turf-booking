@@ -39,6 +39,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     window.scrollTo(0, 0);
   }, [location]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [mobileMenuOpen]);
+
   const handleWhatsAppClick = useCallback(() => {
     const message = getWhatsAppMessage();
     const encoded = encodeURIComponent(message);
@@ -69,49 +87,48 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 lg:hidden"
+            style={{ top: '64px' }}
           >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="absolute right-0 top-0 h-full w-72 glass-strong p-6"
+              className="absolute right-0 top-0 h-full w-72 bg-[#0B0F14] border-l border-white/10 shadow-2xl overflow-y-auto"
             >
-              <button onClick={() => setMobileMenuOpen(false)} className="absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 transition-colors">
-                <X className="w-6 h-6" />
-              </button>
-              <div className="space-y-1 mt-12">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    className={`block px-4 py-3 rounded-xl text-lg font-medium transition-all ${
-                      location === item.path
-                        ? "bg-[#1E8E3E]/20 text-[#4ADE80] border border-[#1E8E3E]/30"
-                        : "text-gray-300 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+              <div className="p-6">
+                <div className="space-y-2 mb-6">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                        location === item.path
+                          ? "bg-[#1E8E3E]/20 text-[#4ADE80] border border-[#1E8E3E]/30"
+                          : "text-gray-300 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
                 <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleWhatsAppClick();
-                }}
-                className="w-full mt-4 btn-gradient text-white font-semibold py-3 rounded-xl text-lg"
-              >
-                Book Now
-              </button>
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full btn-gradient text-white font-semibold py-3 rounded-xl text-base"
+                >
+                  Book Now
+                </button>
               </div>
             </motion.div>
           </motion.div>
@@ -123,9 +140,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <Footer />
       </main>
-
-      {/* Bottom Mobile Nav */}
-      <MobileBottomNav />
 
       {/* Floating WhatsApp Button (hide on booking page to avoid conflict with booking button) */}
       {location !== "/booking" && (
@@ -168,14 +182,8 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: {
   const [location] = useLocation();
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "glass-strong py-3 shadow-xl"
-          : "bg-transparent py-4"
-      }`}
-    >
-      <div className="container flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B0F14] border-b border-white/10 shadow-lg">
+      <div className="container flex items-center justify-between py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <img
@@ -221,73 +229,6 @@ function Navbar({ scrolled, mobileMenuOpen, setMobileMenuOpen }: {
         </button>
       </div>
     </header>
-  );
-}
-
-/* ---------- Mobile Bottom Nav ---------- */
-function MobileBottomNav() {
-  const [location] = useLocation();
-  const [show, setShow] = useState(true);
-  const [lastScroll, setLastScroll] = useState(0);
-
-  // Hide bottom nav on booking page to prevent overlap with summary
-  const isBookingPage = location === "/booking";
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY;
-      setShow(current < lastScroll || current < 100);
-      setLastScroll(current);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScroll]);
-
-  // Don't render on booking page
-  if (isBookingPage) return null;
-
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.nav
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          exit={{ y: 100 }}
-          transition={{ type: "spring", damping: 30 }}
-          className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-strong border-t border-white/10"
-          style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-        >
-          <div className="flex items-center justify-around py-2 px-2">
-            {[
-              { label: "Home", path: "/", icon: "🏠" },
-              { label: "Sports", path: "/sports", icon: "🏟️" },
-              { label: "Booking", path: "/booking", icon: "📅" },
-              { label: "Contact", path: "/contact", icon: "📞" },
-            ].map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all min-w-[60px] ${
-                  location === item.path
-                    ? "text-[#4ADE80] scale-105"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="text-[10px] font-medium">{item.label}</span>
-                {location === item.path && (
-                  <motion.div
-                    layoutId="bottom-nav-indicator"
-                    className="absolute bottom-1 w-8 h-1 rounded-full bg-[#1E8E3E]"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </Link>
-            ))}
-          </div>
-        </motion.nav>
-      )}
-    </AnimatePresence>
   );
 }
 

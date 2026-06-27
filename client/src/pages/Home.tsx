@@ -59,7 +59,7 @@ export default function Home() {
   }, [statsVisible]);
 
   return (
-    <div className="pb-20 lg:pb-0">
+    <div className="pt-24 pb-10">
       <LoadingScreen />
 
       {/* ===== HERO ===== */}
@@ -99,7 +99,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image with parallax */}
       <div
         className="absolute inset-0"
@@ -239,7 +239,7 @@ function HeroSection() {
               </svg>
               <span className="group-hover:text-[#E4405F] transition-colors"> @akans_arena__</span>
             </a>
-            <p className="text-xs text-gray-500 font-medium">Visit our page for updates & offers</p>
+            <p className="text-xs text-gray-500 font-medium">Click to visit our page</p>
           </div>
         </motion.div>
       </div>

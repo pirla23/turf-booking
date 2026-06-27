@@ -13,7 +13,7 @@ export default function Sports() {
   const { setSport } = useBooking();
 
   return (
-    <div className="pt-24 pb-20 min-h-screen">
+    <div className="pt-24 pb-10 min-h-screen">
       <div className="container max-w-5xl">
         <ScrollReveal>
           <div className="text-center mb-12">
