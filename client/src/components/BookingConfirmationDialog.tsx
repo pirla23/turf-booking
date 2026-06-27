@@ -13,8 +13,6 @@ interface Props {
 export default function BookingConfirmationDialog({ open, onClose, onConfirm, booking }: Props) {
   const sport = SPORTS.find(s => s.id === booking.sport);
   const total = (sport?.pricePerHour || booking.pricePerHour) * (booking.duration ? parseInt(booking.duration) : 1);
-  const gst = total * 0.12;
-  const grandTotal = total + gst;
 
   return (
     <AnimatePresence>
@@ -31,14 +29,14 @@ export default function BookingConfirmationDialog({ open, onClose, onConfirm, bo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70 backdrop-blur-md"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative glass-strong rounded-2xl p-6 w-full max-w-md"
+            className="relative glass-strong rounded-2xl p-6 w-full max-w-md bg-[#0B0F14] border border-white/10"
           >
             {/* Close button */}
             <button
@@ -76,18 +74,10 @@ export default function BookingConfirmationDialog({ open, onClose, onConfirm, bo
                 <span className="text-gray-400">Duration</span>
                 <span className="text-white font-medium">{booking.duration ? `${booking.duration} Hour${booking.duration !== "1" ? "s" : ""}` : "—"}</span>
               </div>
-              <div className="border-t border-white/10 pt-3 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Subtotal</span>
-                  <span className="text-white">₹{total.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">GST (12%)</span>
-                  <span className="text-white">₹{gst.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                </div>
-                <div className="flex justify-between text-base font-bold pt-2 border-t border-white/10">
+              <div className="border-t border-white/10 pt-3">
+                <div className="flex justify-between text-base font-bold">
                   <span className="text-white">Total</span>
-                  <span className="text-[#4ADE80]">₹{grandTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                  <span className="text-[#4ADE80]">₹{total.toLocaleString()}</span>
                 </div>
               </div>
             </div>

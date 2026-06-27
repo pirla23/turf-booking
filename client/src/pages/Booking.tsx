@@ -19,15 +19,18 @@ export default function Booking() {
 
   const sport = SPORTS.find(s => s.id === booking.sport);
 
-  // Simulate slot availability - some slots are booked/past
+  // Dynamic slot availability - only past slots are unavailable
   const slotStatus = useMemo(() => {
     const now = new Date();
+    const today = now.toISOString().split("T")[0];
     const currentHour = now.getHours();
+    
     return TIME_SLOTS.map((slot, i) => {
       const slotHour = i + 6; // 6 AM base
-      if (slotHour < currentHour) return "past";
-      // Simulate ~30% booked
-      if ([2, 5, 9, 12, 15].includes(i)) return "booked";
+      // Only mark as past if it's today and the hour has passed
+      if (booking.date === today && slotHour < currentHour) {
+        return "past";
+      }
       return "available";
     });
   }, [booking.date]);
@@ -35,21 +38,28 @@ export default function Booking() {
   const selectedDuration = DURATION_OPTIONS.find(d => d.value === booking.duration);
   const basePrice = sport?.pricePerHour || 500;
   const hours = selectedDuration?.hours || 1;
-  const subtotal = basePrice * hours;
-  const gst = subtotal * 0.12;
-  const total = subtotal + gst;
+  const total = basePrice * hours;
 
   const handleSlotClick = (index: number) => {
     if (slotStatus[index] !== "available") return;
 
     const currentSlots = [...booking.slots];
     const clickedSlot = index;
+    const clickedSlotTime = TIME_SLOTS[clickedSlot];
+
+    // Check if the clicked slot is already selected (allow deselection)
+    if (currentSlots.includes(clickedSlotTime)) {
+      // Deselect the slot
+      setSlots([]);
+      setStartTime("");
+      return;
+    }
 
     // If we have a duration, select consecutive slots
     if (selectedDuration) {
       const newSlots: number[] = [];
       for (let i = 0; i < hours && clickedSlot + i < TIME_SLOTS.length; i++) {
-        if (slotStatus[clickedSlot + i] !== "available" && !currentSlots.includes(TIME_SLOTS[clickedSlot + i])) return;
+        if (slotStatus[clickedSlot + i] !== "available") return;
         newSlots.push(clickedSlot + i);
       }
       if (newSlots.length === hours) {
@@ -57,10 +67,10 @@ export default function Booking() {
         setStartTime(TIME_SLOTS[clickedSlot]);
       }
     } else {
-      if (currentSlots.includes(TIME_SLOTS[clickedSlot])) {
-        setSlots(currentSlots.filter(s => s !== TIME_SLOTS[clickedSlot]));
+      if (currentSlots.includes(clickedSlotTime)) {
+        setSlots(currentSlots.filter(s => s !== clickedSlotTime));
       } else {
-        setSlots([...currentSlots, TIME_SLOTS[clickedSlot]]);
+        setSlots([...currentSlots, clickedSlotTime]);
       }
     }
   };
@@ -188,10 +198,6 @@ export default function Booking() {
                   <span className="text-gray-400">Available</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded bg-red-500/20 border border-red-500/30" />
-                  <span className="text-gray-400">Booked</span>
-                </div>
-                <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded bg-gray-500/20 border border-gray-500/20" />
                   <span className="text-gray-400">Past</span>
                 </div>
@@ -212,14 +218,11 @@ export default function Booking() {
                           ? "slot-selected text-white"
                           : status === "available"
                           ? "slot-available text-gray-300"
-                          : status === "booked"
-                          ? "slot-booked text-red-400"
                           : "slot-past text-gray-600"
                       } ${status === "past" ? "cursor-not-allowed" : ""}`}
                     >
                       <span className="font-semibold">{slot}</span>
                       {isSelected && <CheckCircle2 className="w-3 h-3 mx-auto mt-1 text-[#4ADE80]" />}
-                      {status === "booked" && <span className="text-[8px] block mt-1">Booked</span>}
                     </motion.button>
                   );
                 })}
@@ -257,17 +260,9 @@ export default function Booking() {
                   <span className="text-gray-400">Duration</span>
                   <span className="text-white font-medium">{booking.duration} Hour{booking.duration !== "1" ? "s" : ""}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Subtotal</span>
-                  <span className="text-white">₹{subtotal.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">GST (12%)</span>
-                  <span className="text-white">₹{gst.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                </div>
                 <div className="col-span-2 flex justify-between pt-2 border-t border-white/10">
                   <span className="text-white font-bold font-[Outfit]">Total</span>
-                  <span className="text-[#4ADE80] font-bold font-[Outfit] text-lg">₹{total.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                  <span className="text-[#4ADE80] font-bold font-[Outfit] text-lg">₹{total.toLocaleString()}</span>
                 </div>
               </div>
 

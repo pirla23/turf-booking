@@ -89,11 +89,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <button onClick={() => setMobileMenuOpen(false)} className="absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 transition-colors">
                 <X className="w-6 h-6" />
               </button>
-              <div className="flex items-center gap-3 mb-6">
-                <img src="/logo.png" alt="Akan's Arena Logo" className="w-10 h-10 object-contain rounded-lg" />
-                <span className="text-base font-bold font-[Outfit] text-white">AKAN'S ARENA</span>
-              </div>
-              <div className="space-y-1">
+              <div className="space-y-1 mt-12">
                 {navItems.map((item) => (
                   <Link
                     key={item.path}
@@ -147,7 +143,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </motion.button>
       )}
 
-      {/* Back to Top */}
+      {/* Back to Top - Desktop only */}
       <AnimatePresence>
         {showBackToTop && (
           <motion.button
@@ -155,7 +151,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-20 lg:bottom-24 right-4 lg:right-8 z-50 w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all"
+            className="hidden lg:flex fixed bottom-24 right-8 z-50 w-10 h-10 rounded-full glass items-center justify-center hover:bg-white/10 transition-all"
           >
             <ChevronUp className="w-5 h-5" />
           </motion.button>

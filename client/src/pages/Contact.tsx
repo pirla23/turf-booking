@@ -250,7 +250,7 @@ export default function Contact() {
                 <div>
                   <p className="text-white font-medium">Instagram</p>
                   <a href="https://instagram.com/akans_arena__" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-400 hover:text-[#E4405F] transition-colors">
-                    @akans_arena__ (304 followers)
+                    @akans_arena__
                   </a>
                 </div>
               </div>

@@ -26,7 +26,7 @@ export const SPORTS = [
     name: "Pickleball",
     description: "Modern court with professional pickleball markings. Perfect for beginners and experienced players alike. Growing popularity in the region.",
     pricePerHour: 600,
-    image: "/pickleball.png",
+    image: "/pickleball-new.png",
     features: ["Modern Court Design", "Professional Markings", "Beginner Friendly", "Equipment Available"],
   },
 ];
