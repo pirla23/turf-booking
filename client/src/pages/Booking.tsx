@@ -146,8 +146,9 @@ export default function Booking() {
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
                 value={booking.date}
+                placeholder="Tap here to select a date"
                 onChange={(e) => { setDate(e.target.value); setSession(""); }}
-                className="w-full glass rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 appearance-none cursor-pointer"
+                className={`w-full glass rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 appearance-none cursor-pointer ${booking.date ? 'text-white' : 'text-gray-400'}`}
                 style={{ colorScheme: "dark" }}
               />
             </div>
