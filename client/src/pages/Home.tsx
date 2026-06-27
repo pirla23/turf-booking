@@ -145,7 +145,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-end md:items-center justify-center overflow-hidden pb-8 md:pb-0">
       {/* Background image with parallax */}
       <div
         className="absolute inset-0"
@@ -208,14 +208,14 @@ function HeroSection() {
       ))}
 
       {/* Content */}
-      <div className="relative z-20 text-center px-4 max-w-4xl pt-12 md:pt-0">
+      <div className="relative z-20 text-center px-4 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.2 }}
         >
           {/* Heading */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-[Outfit] text-white leading-[1.05] tracking-tight mb-4 mt-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-[Outfit] text-white leading-[1.05] tracking-tight mb-3">
             AKAN'S
             <span className="text-gradient"> ARENA</span>
           </h1>
