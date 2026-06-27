@@ -230,6 +230,9 @@ function MobileBottomNav() {
   const [show, setShow] = useState(true);
   const [lastScroll, setLastScroll] = useState(0);
 
+  // Hide bottom nav on booking page to prevent overlap with summary
+  const isBookingPage = location === "/booking";
+
   useEffect(() => {
     const handleScroll = () => {
       const current = window.scrollY;
@@ -239,6 +242,9 @@ function MobileBottomNav() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScroll]);
+
+  // Don't render on booking page
+  if (isBookingPage) return null;
 
   return (
     <AnimatePresence>
