@@ -142,15 +142,21 @@ export default function Booking() {
                 <div className="w-8 h-8 rounded-lg bg-[#1E8E3E] flex items-center justify-center text-white text-sm font-bold">2</div>
                 <h2 className="text-lg font-bold font-[Outfit] text-white">Select Date</h2>
               </div>
-              <input
-                type="date"
-                min={new Date().toISOString().split("T")[0]}
-                value={booking.date}
-                placeholder="Tap here to select a date"
-                onChange={(e) => { setDate(e.target.value); setSession(""); }}
-                className={`w-full glass rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 appearance-none cursor-pointer ${booking.date ? 'text-white' : 'text-gray-400'}`}
-                style={{ colorScheme: "dark" }}
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
+                  value={booking.date}
+                  onChange={(e) => { setDate(e.target.value); setSession(""); }}
+                  className={`w-full glass rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 cursor-pointer ${booking.date ? 'text-white' : 'text-transparent'}`}
+                  style={{ colorScheme: "dark" }}
+                />
+                {!booking.date && (
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none">
+                    Tap here to select a date
+                  </span>
+                )}
+              </div>
             </div>
           </ScrollReveal>
         )}
