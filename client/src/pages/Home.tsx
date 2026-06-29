@@ -292,13 +292,13 @@ function AboutSection() {
               Welcome to Our Arena
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-[Outfit] text-white mb-6">
-              Welcome to <span className="text-gradient">AKAN'S ARENA</span>
+              About <span className="text-gradient">Our Facility</span>
             </h2>
             <p className="text-gray-400 leading-relaxed text-base md:text-lg">
-              Located in Attur, Salem, AKAN'S ARENA is designed for sports lovers who want a premium playing
+              Designed for sports lovers who want a premium playing
               experience. Our professionally maintained turf, modern lighting, and excellent facilities provide
               the perfect environment for football, cricket, and pickleball. Whether you are planning a casual
-              game, tournament, corporate event, or team practice, AKAN'S ARENA offers everything needed for
+              game, tournament, corporate event, or team practice, we offer everything needed for
               an unforgettable sports experience.
             </p>
           </div>

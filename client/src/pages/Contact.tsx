@@ -12,8 +12,6 @@ import { toast } from "sonner";
 
 export default function Contact() {
   const { getWhatsAppMessage } = useBooking();
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
-  const [sending, setSending] = useState(false);
 
   const handleWhatsAppContact = () => {
     const message = getWhatsAppMessage();
@@ -27,16 +25,6 @@ export default function Contact() {
 
   const handleDirections = () => {
     window.open(GOOGLE_MAPS_LINK, "_blank");
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      toast.success("Message sent! We'll get back to you soon.");
-      setFormData({ name: "", phone: "", email: "", message: "" });
-    }, 1500);
   };
 
   return (
@@ -106,11 +94,10 @@ export default function Contact() {
           </div>
         </ScrollReveal>
 
-        {/* Map + Contact Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-          {/* Google Maps */}
-          <ScrollReveal direction="left">
-            <div className="glass rounded-2xl overflow-hidden h-80 lg:h-full">
+        {/* Map */}
+        <div className="mb-10">
+          <ScrollReveal>
+            <div className="glass rounded-2xl overflow-hidden h-[400px] w-full">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5!2d78.62!3d11.68!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAttur%2C+Salem%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1"
                 width="100%"
@@ -121,62 +108,6 @@ export default function Contact() {
                 referrerPolicy="no-referrer-when-downgrade"
                 className="rounded-2xl"
               />
-            </div>
-          </ScrollReveal>
-
-          {/* Contact Form */}
-          <ScrollReveal direction="right">
-            <div className="glass rounded-2xl p-6 md:p-8">
-              <h2 className="text-xl font-bold font-[Outfit] text-white mb-6">Send us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="glass rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="glass rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
-                  />
-                </div>
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full glass rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50"
-                />
-                <textarea
-                  placeholder="Your Message"
-                  rows={4}
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full glass rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1E8E3E]/50 resize-none"
-                />
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="w-full btn-gradient text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-[#1E8E3E]/20 disabled:opacity-50"
-                >
-                  {sending ? (
-                    <span className="animate-pulse">Sending...</span>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      Send Message
-                    </>
-                  )}
-                </button>
-              </form>
             </div>
           </ScrollReveal>
         </div>
